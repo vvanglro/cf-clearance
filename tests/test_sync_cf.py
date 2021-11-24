@@ -6,7 +6,7 @@ from cf_clearance import sync_retry, stealth_sync
 
 def main():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, proxy={"server": "socks5://192.168.88.39:7890"}, args=[
+        browser = p.chromium.launch(headless=False, proxy={"server": "socks5://localhost:7890"}, args=[
             "--disable-gpu",
             '--no-sandbox',
             '--disable-dev-shm-usage',

@@ -8,7 +8,7 @@ from cf_clearance import async_retry, stealth_async
 
 async def main():
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False, proxy={"server": "socks5://192.168.88.39:7890"}, args=[
+        browser = await p.chromium.launch(headless=False, proxy={"server": "socks5://localhost:7890"}, args=[
             "--disable-gpu",
             '--no-sandbox',
             '--disable-dev-shm-usage',
