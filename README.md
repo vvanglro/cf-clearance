@@ -3,6 +3,10 @@ Reference from [playwright_stealth](https://github.com/AtuboDad/playwright_steal
 
 Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with the cf_clearance, make sure you use the same IP and UA as when you got it.
 
+## Warning
+Please use interface mode, You must add headless=False.  
+If you use it on linux, use XVFB.
+
 ## Install
 
 ```
@@ -16,7 +20,7 @@ from playwright.sync_api import sync_playwright
 from cf_clearance import sync_retry, stealth_sync
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=False)
     page = browser.new_page()
     stealth_sync(page)
     page.goto('https://nowsecure.nl')
@@ -40,7 +44,7 @@ from cf_clearance import async_retry, stealth_async
 
 async def main():
     async with async_playwright() as p:
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(headless=False)
         page = await browser.new_page()
         await stealth_async(page)
         await page.goto('https://nowsecure.nl')
