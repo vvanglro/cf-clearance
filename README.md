@@ -5,7 +5,7 @@ Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearanc
 
 ## Warning
 Please use interface mode, You must add headless=False.  
-If you use it on linux, use XVFB.
+If you use it on linux or docker, use XVFB.
 
 ## Install
 
