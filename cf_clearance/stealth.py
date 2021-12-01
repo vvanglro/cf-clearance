@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Union
 
 import pkg_resources
 from playwright.async_api import Page as AsyncPage
 from playwright.sync_api import Page as SyncPage
+from playwright.async_api import BrowserContext as AsyncContext
+from playwright.sync_api import BrowserContext as SyncContext
 
 
 def from_file(name):
@@ -61,13 +63,17 @@ class StealthConfig:
             yield SCRIPTS['navigator_webdriver']
 
 
-def stealth_sync(page: SyncPage, config: StealthConfig = None):
+def stealth_sync(
+    page_or_context: Union[SyncContext, SyncPage], config: StealthConfig = None
+):
     """teaches synchronous playwright Page to be stealthy like a ninja!"""
     for script in (config or StealthConfig()).enabled_scripts:
-        page.add_init_script(script)
+        page_or_context.add_init_script(script)
 
 
-async def stealth_async(page: AsyncPage, config: StealthConfig = None):
+async def stealth_async(
+    page_or_context: Union[AsyncContext, AsyncPage], config: StealthConfig = None
+):
     """teaches asynchronous playwright Page to be stealthy like a ninja!"""
     for script in (config or StealthConfig()).enabled_scripts:
-        await page.add_init_script(script)
+        await page_or_context.add_init_script(script)

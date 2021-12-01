@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cf_clearance"
-version = "0.0.1"
+version = "0.0.2"
 description = "Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with the cf_clearance, make sure you use the same IP and UA as when you got it."
 authors = ["vvanglro <you@example.com>"]
 readme = "README.md"
