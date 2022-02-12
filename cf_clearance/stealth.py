@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from dataclasses import dataclass
 from typing import Dict, Union
 
@@ -64,16 +65,26 @@ class StealthConfig:
 
 
 def stealth_sync(
-    page_or_context: Union[SyncContext, SyncPage], config: StealthConfig = None
+    page_or_context: Union[SyncContext, SyncPage], config: StealthConfig = None, pure=True
 ):
     """teaches synchronous playwright Page to be stealthy like a ninja!"""
     for script in (config or StealthConfig()).enabled_scripts:
         page_or_context.add_init_script(script)
+    if pure:
+        page_or_context.route(
+            re.compile(r"(.*\.png(\?.*|$))|(.*\.jpg(\?.*|$))|(.*\.jpeg(\?.*|$))|(.*\.css(\?.*|$))"),
+            lambda route: route.abort("blockedbyclient")
+        )
 
 
 async def stealth_async(
-    page_or_context: Union[AsyncContext, AsyncPage], config: StealthConfig = None
+    page_or_context: Union[AsyncContext, AsyncPage], config: StealthConfig = None, pure=True
 ):
     """teaches asynchronous playwright Page to be stealthy like a ninja!"""
     for script in (config or StealthConfig()).enabled_scripts:
         await page_or_context.add_init_script(script)
+    if pure:
+        await page_or_context.route(
+            re.compile(r"(.*\.png(\?.*|$))|(.*\.jpg(\?.*|$))|(.*\.jpeg(\?.*|$))|(.*\.css(\?.*|$))"),
+            lambda route: route.abort("blockedbyclient")
+        )

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from playwright.sync_api import sync_playwright
 
-from cf_clearance import sync_retry, stealth_sync
+from cf_clearance import sync_cf_retry, stealth_sync
 from tests.test_common import test_not_pass_cf_challenge_request, test_add_ua_cookie_cf_success
 
 
@@ -19,9 +19,11 @@ def test_cf_challenge():
         ])
         content = browser.new_context(no_viewport=True)
         page = content.new_page()
-        stealth_sync(page)
+        stealth_sync(page, pure=True)
         page.goto('https://nowsecure.nl')
-        res = sync_retry(page)
+        res = sync_cf_retry(page)
+        ua = None
+        cf_clearance_value = None
         if res:
             cookies = page.context.cookies()
             for cookie in cookies:
@@ -30,10 +32,10 @@ def test_cf_challenge():
                     print(cf_clearance_value)
             ua = page.evaluate('() => {return navigator.userAgent}')
             print(ua)
-            return ua, cf_clearance_value
         else:
             print("cf challenge fail")
         browser.close()
+        return ua, cf_clearance_value
 
 
 def main():
