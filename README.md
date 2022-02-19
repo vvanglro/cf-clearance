@@ -14,10 +14,14 @@ $ pip install cf_clearance
 ```
 
 ## Usage
+Please make sure it is the latest package.
+```
+$ pip install --upgrade cf_clearance
+```
 ### sync
 ```python
 from playwright.sync_api import sync_playwright
-from cf_clearance import sync_retry, stealth_sync
+from cf_clearance import sync_cf_retry, stealth_sync
 import requests
 
 # not use cf_clearance, cf challenge is fail
@@ -31,9 +35,9 @@ if '<title>Please Wait... | Cloudflare</title>' in res.text:
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False, proxy={"server": "socks5://localhost:7890"})
     page = browser.new_page()
-    stealth_sync(page)
+    stealth_sync(page, pure=True)
     page.goto('https://nowsecure.nl')
-    res = sync_retry(page)
+    res = sync_cf_retry(page)
     if res:
         cookies = page.context.cookies()
         for cookie in cookies:
@@ -56,7 +60,7 @@ if '<title>Please Wait... | Cloudflare</title>' not in res.text:
 ```python
 import asyncio
 from playwright.async_api import async_playwright
-from cf_clearance import async_retry, stealth_async
+from cf_clearance import async_cf_retry, stealth_async
 import requests
 
 
@@ -72,9 +76,9 @@ async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False, proxy={"server": "socks5://localhost:7890"})
         page = await browser.new_page()
-        await stealth_async(page)
+        await stealth_async(page, pure=True)
         await page.goto('https://nowsecure.nl')
-        res = await async_retry(page)
+        res = await async_cf_retry(page)
         if res:
             cookies = await page.context.cookies()
             for cookie in cookies:
