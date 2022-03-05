@@ -1,55 +1,52 @@
 # -*- coding: utf-8 -*-
 import asyncio
+import functools
 import time
+import gevent.hub
 
-from playwright.async_api import Error
+import gevent
+
 from playwright.async_api import Page as AsyncPage
 from playwright.sync_api import Page as SyncPage
+from playwright.async_api import expect as async_expect
+from playwright.sync_api import expect as sync_expect
 
 
-async def async_cf_retry(page: AsyncPage, tries=10) -> bool:
+async def async_cf_retry(page: AsyncPage, tries=5) -> bool:
+    page_assertions = async_expect(page)
     success = False
     while tries != 0:
         try:
-            title = await page.title()
-        except Error:
+            disabled_title_list = ['Please Wait... | Cloudflare', 'Just a moment...', 'www.', 'about:black']
+            await asyncio.gather(
+                *[asyncio.create_task(page_assertions.not_to_have_title(disabled_title, timeout=5000)) for
+                  disabled_title in
+                  disabled_title_list])
+        except AssertionError:
             tries -= 1
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.1)
         else:
-            if title == 'Please Wait... | Cloudflare':
-                raise NotImplementedError('Encountered recaptcha. Check whether your proxy is an elite proxy.')
-            elif title == 'Just a moment...':
-                tries -= 1
-                await asyncio.sleep(2)
-            elif "www." in title:
-                await page.reload()
-                tries -= 1
-                await asyncio.sleep(3)
-            else:
-                success = True
-                break
+            success = True
+            break
     return success
 
 
-def sync_cf_retry(page: SyncPage, tries=10) -> bool:
+def sync_cf_retry(page: SyncPage, tries=5) -> bool:
+    page_assertions = sync_expect(page)
+    gevent.hub.Hub.NOT_ERROR = (AssertionError,)
     success = False
     while tries != 0:
         try:
-            title = page.title()
-        except Error:
+            disabled_title_list = ['Please Wait... | Cloudflare', 'Just a moment...', 'www.', 'about:black']
+            jobs = [gevent.spawn(functools.partial(page_assertions.not_to_have_title, disabled_title), timeout=5000) for
+                    disabled_title in
+                    disabled_title_list]
+            gevent.joinall(jobs, raise_error=True)
+
+        except AssertionError:
             tries -= 1
             time.sleep(1)
         else:
-            if title == 'Please Wait... | Cloudflare':
-                raise NotImplementedError('Encountered recaptcha. Check whether your proxy is an elite proxy.')
-            elif title == 'Just a moment...':
-                tries -= 1
-                time.sleep(2)
-            elif "www." in title:
-                page.reload()
-                tries -= 1
-                time.sleep(3)
-            else:
-                success = True
-                break
+            success = True
+            break
     return success

@@ -7,9 +7,14 @@ readme = "README.md"
 homepage = "https://github.com/vvanglro/cf_clearance"
 repository = "https://github.com/vvanglro/cf_clearance"
 
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
+
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
-playwright = "^1.17.0"
+playwright = "^1.19.0"
 
 [tool.poetry.dev-dependencies]
 
