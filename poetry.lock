@@ -11,7 +11,7 @@ docs = ["sphinx"]
 
 [[package]]
 name = "playwright"
-version = "1.18.2"
+version = "1.20.0"
 description = "A high-level API to automate web browsers"
 category = "main"
 optional = false
@@ -33,7 +33,7 @@ python-versions = "*"
 
 [[package]]
 name = "typing-extensions"
-version = "4.0.1"
+version = "4.1.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
 category = "main"
 optional = false
@@ -50,7 +50,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<3.11"
-content-hash = "ccd0df52411b2a4c73e9893788075dde85c2db5686215aa0d9246b0eb0724468"
+content-hash = "34c1228850a18a12b4a7ea0e1607d56a66bd67549a4ab6c7e884f45834a49148"
 
 [metadata.files]
 greenlet = [
@@ -111,21 +111,21 @@ greenlet = [
     {file = "greenlet-1.1.2.tar.gz", hash = "sha256:e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a"},
 ]
 playwright = [
-    {file = "playwright-1.18.2-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:5b512d0d734a2b6bc001461fdf1cc65e5ef1c8489187d03f6a7c0ed3552fe469"},
-    {file = "playwright-1.18.2-py3-none-macosx_11_0_arm64.whl", hash = "sha256:75aacc73bdfb6c6832e7a09f3e9d356db0e2bd8f18d719b068c17c841c0a5507"},
-    {file = "playwright-1.18.2-py3-none-macosx_11_0_universal2.whl", hash = "sha256:0d69764ea9a216ce933eb5679ff6aa6399e7e9e43360809ec261549741e1b8d6"},
-    {file = "playwright-1.18.2-py3-none-manylinux1_x86_64.whl", hash = "sha256:425c475b65562a6a2f7d46c5dcaa13d8ff098da101a100600016d320325ec436"},
-    {file = "playwright-1.18.2-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6d640e10ce2a41fb474be74526ec1413e71ed242b963a63b4a0ff6f30afabb5d"},
-    {file = "playwright-1.18.2-py3-none-win32.whl", hash = "sha256:51f946c98805eedc965673e873c4d828af298cbe171ef26a256d653e3730632a"},
-    {file = "playwright-1.18.2-py3-none-win_amd64.whl", hash = "sha256:4b55758555dd3937ed0722446182f0b97e96704895bea47cf58d04fd7a900edb"},
+    {file = "playwright-1.20.0-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:444a56049d1de7a770a9d0e9d8ca3846a444e582b46e9ca1db35d6d571926d69"},
+    {file = "playwright-1.20.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:506d9249f474bd7c5346a875effca3f7790fb308516e668ebcaae034200c3a0b"},
+    {file = "playwright-1.20.0-py3-none-macosx_11_0_universal2.whl", hash = "sha256:6f5ba082f702865e0bac936ae47d2c002f354c4dcebb09b093997ffe96f0778d"},
+    {file = "playwright-1.20.0-py3-none-manylinux1_x86_64.whl", hash = "sha256:8240ef3eda53a827aaba1524873a27a95b4316668adfa1b15fec0b2c390a7bf1"},
+    {file = "playwright-1.20.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:768a5d176bc244fe94cea8e71573d84b2794b285f1aaffc201ec1a436212516a"},
+    {file = "playwright-1.20.0-py3-none-win32.whl", hash = "sha256:fa7f3b4b94ae9d0ea8bab6aec53526e571a493341f5bb0c561c8f1cbe6d14228"},
+    {file = "playwright-1.20.0-py3-none-win_amd64.whl", hash = "sha256:84300615ec42ffae3a4950a685f7d3afb0f25f7c7f0c6896213922339ef3acb3"},
 ]
 pyee = [
     {file = "pyee-8.1.0-py2.py3-none-any.whl", hash = "sha256:383973b63ad7ed5e3c0311f8b179c52981f9e7b3eaea0e9a830d13ec34dde65f"},
     {file = "pyee-8.1.0.tar.gz", hash = "sha256:92dacc5bd2bdb8f95aa8dd2585d47ca1c4840e2adb95ccf90034d64f725bfd31"},
 ]
 typing-extensions = [
-    {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
-    {file = "typing_extensions-4.0.1.tar.gz", hash = "sha256:4ca091dea149f945ec56afb48dae714f21e8692ef22a395223bcd328961b6a0e"},
+    {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
+    {file = "typing_extensions-4.1.1.tar.gz", hash = "sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42"},
 ]
 websockets = [
     {file = "websockets-10.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:38db6e2163b021642d0a43200ee2dec8f4980bdbda96db54fde72b283b54cbfc"},

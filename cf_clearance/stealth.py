@@ -64,8 +64,8 @@ class StealthConfig:
             yield SCRIPTS['navigator_webdriver']
 
 
-def stealth_sync(
-    page_or_context: Union[SyncContext, SyncPage], config: StealthConfig = None, pure=True
+def sync_stealth(
+        page_or_context: Union[SyncContext, SyncPage], config: StealthConfig = None, pure: bool = True
 ):
     """teaches synchronous playwright Page to be stealthy like a ninja!"""
     for script in (config or StealthConfig()).enabled_scripts:
@@ -77,8 +77,8 @@ def stealth_sync(
         )
 
 
-async def stealth_async(
-    page_or_context: Union[AsyncContext, AsyncPage], config: StealthConfig = None, pure=True
+async def async_stealth(
+        page_or_context: Union[AsyncContext, AsyncPage], config: StealthConfig = None, pure: bool = True
 ):
     """teaches asynchronous playwright Page to be stealthy like a ninja!"""
     for script in (config or StealthConfig()).enabled_scripts:

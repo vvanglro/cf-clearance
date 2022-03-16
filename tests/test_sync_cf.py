@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from playwright.sync_api import sync_playwright
 
-from cf_clearance import sync_cf_retry, stealth_sync
+from cf_clearance import sync_cf_retry, sync_stealth
 from tests.test_common import test_not_pass_cf_challenge_request, test_add_ua_cookie_cf_success
 
 
@@ -19,7 +19,7 @@ def test_cf_challenge():
         ])
         content = browser.new_context(no_viewport=True)
         page = content.new_page()
-        stealth_sync(page, pure=True)
+        sync_stealth(page, pure=True)
         page.goto('https://nowsecure.nl')
         res = sync_cf_retry(page)
         ua = None
