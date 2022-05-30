@@ -9,7 +9,7 @@ repository = "https://github.com/vvanglro/cf_clearance"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
-playwright = "^1.19.0"
+playwright = "^1.22.0"
 
 [tool.poetry.dev-dependencies]
 
