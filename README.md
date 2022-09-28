@@ -14,13 +14,13 @@ If you use it on linux or docker, use XVFB.
 ## Install
 
 ```
-$ pip install cf_clearance
+$ pip install cf-clearance
 ```
 
 ## Usage
 Please make sure it is the latest package.
 ```
-$ pip install --upgrade cf_clearance
+$ pip install --upgrade cf-clearance
 ```
 ### sync
 ```python
