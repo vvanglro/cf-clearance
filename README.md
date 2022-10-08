@@ -15,6 +15,17 @@ the cf_clearance, make sure you use the same IP and UA as when you got it.
 Please use interface mode, You must add headless=False.  
 If you use it on linux or docker, use XVFB.
 
+## Docker
+
+```shell
+docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v1.27.0
+```
+
+```shell
+curl http://localhost:8000/challenge -H "Content-Type:application/json" -X POST \
+-d '{"proxy": {"server": "socks5://localhost:7890"}, "timeout":20, "url": "https://nowsecure.nl"}'
+```
+
 ## Install
 
 ```
@@ -113,15 +124,4 @@ async def main():
 
 
 asyncio.get_event_loop().run_until_complete(main())
-```
-
-## Docker
-
-```shell
-docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v1.27.0
-```
-
-```shell
-curl http://localhost:8000/challenge -H "Content-Type:application/json" -X POST \
--d '{"proxy": {"server": "socks5://localhost:7890"}, "timeout":20, "url": "https://nowsecure.nl"}'
 ```
