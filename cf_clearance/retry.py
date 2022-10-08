@@ -6,6 +6,8 @@ from playwright.async_api import Error
 from playwright.async_api import Page as AsyncPage
 from playwright.sync_api import Page as SyncPage
 
+from cf_clearance.errors import RecaptchaChallengeException
+
 
 async def async_cf_retry(page: AsyncPage, tries=10) -> bool:
     success = False
@@ -17,7 +19,7 @@ async def async_cf_retry(page: AsyncPage, tries=10) -> bool:
             await asyncio.sleep(1)
         else:
             if title == 'Please Wait... | Cloudflare':
-                raise NotImplementedError('Encountered recaptcha. Check whether your proxy is an elite proxy.')
+                raise RecaptchaChallengeException("Encountered recaptcha. Check whether your proxy is an elite proxy.")
             elif title == 'Just a moment...':
                 tries -= 1
                 await asyncio.sleep(2)
@@ -41,7 +43,7 @@ def sync_cf_retry(page: SyncPage, tries=10) -> bool:
             time.sleep(1)
         else:
             if title == 'Please Wait... | Cloudflare':
-                raise NotImplementedError('Encountered recaptcha. Check whether your proxy is an elite proxy.')
+                raise RecaptchaChallengeException("Encountered recaptcha. Check whether your proxy is an elite proxy.")
             elif title == 'Just a moment...':
                 tries -= 1
                 time.sleep(2)
