@@ -1,13 +1,17 @@
 # cf_clearance
+
 [![OSCS Status](https://www.oscs1024.com/platform/badge/vvanglro/cf_clearance.svg?size=small)](https://www.oscs1024.com/project/vvanglro/cf_clearance?ref=badge_small)
 [![Package version](https://badge.fury.io/py/cf_clearance.svg)](https://pypi.python.org/pypi/cf_clearance)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/cf_clearance.svg?color=%2334D058)](https://pypi.python.org/pypi/cf_clearance)
 
-Reference from [playwright_stealth](https://github.com/AtuboDad/playwright_stealth) and [undetected-chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver)
+Reference from [playwright_stealth](https://github.com/AtuboDad/playwright_stealth)
+and [undetected-chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver)
 
-Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with the cf_clearance, make sure you use the same IP and UA as when you got it.
+Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with
+the cf_clearance, make sure you use the same IP and UA as when you got it.
 
 ## Warning
+
 Please use interface mode, You must add headless=False.  
 If you use it on linux or docker, use XVFB.
 
@@ -18,11 +22,15 @@ $ pip install cf-clearance
 ```
 
 ## Usage
+
 Please make sure it is the latest package.
+
 ```
 $ pip install --upgrade cf-clearance
 ```
+
 ### sync
+
 ```python
 from playwright.sync_api import sync_playwright
 from cf_clearance import sync_cf_retry, sync_stealth
@@ -60,7 +68,9 @@ res = requests.get('https://nowsecure.nl', proxies=proxies, headers=headers, coo
 if '<title>Please Wait... | Cloudflare</title>' not in res.text:
     print("cf challenge success")
 ```
+
 ### async
+
 ```python
 import asyncio
 from playwright.async_api import async_playwright
@@ -101,5 +111,17 @@ async def main():
     if '<title>Please Wait... | Cloudflare</title>' not in res.text:
         print("cf challenge success")
 
+
 asyncio.get_event_loop().run_until_complete(main())
+```
+
+## Docker
+
+```shell
+docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v1.27.0
+```
+
+```shell
+curl http://localhost:8000/challenge -H "Content-Type:application/json" -X POST \
+-d '{"proxy": {"server": "socks5://localhost:7890"}, "timeout":20, "url": "https://nowsecure.nl"}'
 ```
