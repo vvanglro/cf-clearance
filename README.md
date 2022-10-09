@@ -18,6 +18,7 @@ If you use it on linux or docker, use XVFB.
 ## Docker
 
 Recommended to install using a Docker container
+
 ```shell
 docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v1.27.0 \
 --host 0.0.0.0 --port 8000 --workers 1
