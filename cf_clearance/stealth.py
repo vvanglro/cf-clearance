@@ -21,6 +21,8 @@ SCRIPTS: Dict[str, str] = {
     'chrome_touch': from_file('emulate.touch.js'),
     'navigator_permissions': from_file('navigator.permissions.js'),
     'navigator_webdriver': from_file('navigator.webdriver.js'),
+    'chrome_runtime': from_file('chrome.runtime.js'),
+    'chrome_plugin': from_file('chrome.plugin.js'),
 }
 
 
@@ -43,11 +45,13 @@ class StealthConfig:
         ```
     """
     # load script options
-    chrome_fp: bool = True
-    chrome_global: bool = True
-    chrome_touch: bool = True
-    navigator_permissions: bool = True
+    chrome_fp: bool = False
+    chrome_global: bool = False
+    chrome_touch: bool = False
+    navigator_permissions: bool = False
     navigator_webdriver: bool = True
+    chrome_runtime: bool = True
+    chrome_plugin: bool = True
 
     @property
     def enabled_scripts(self):
@@ -62,6 +66,10 @@ class StealthConfig:
             yield SCRIPTS['navigator_permissions']
         if self.navigator_webdriver:
             yield SCRIPTS['navigator_webdriver']
+        if self.chrome_plugin:
+            yield SCRIPTS['chrome_plugin']
+        if self.chrome_runtime:
+            yield SCRIPTS['chrome_runtime']
 
 
 def sync_stealth(
