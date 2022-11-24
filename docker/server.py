@@ -1,11 +1,11 @@
 import asyncio
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from playwright.async_api import async_playwright
 from pydantic import BaseModel, Field
 
 from cf_clearance import async_cf_retry, async_stealth
-from cf_clearance.errors import RecaptchaChallengeException
 
 from pyvirtualdisplay import Display
 
@@ -39,19 +39,20 @@ class ChallengeResponse(BaseModel):
     success: bool = Field(True)
     msg: str = Field(None)
     user_agent: str = Field(None)
-    cf_clearance_value: str = Field(None)
+    cookies: dict = Field(None)
 
 
 async def pw_challenge(data: ChallengeRequest):
     # Create a new context for each request:
     # https://github.com/microsoft/playwright/issues/17736#issuecomment-1263667429
     # https://github.com/microsoft/playwright/issues/6319
-    proxy_setting = data.proxy
     with Display():
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False, proxy={"server": proxy_setting.server,
-                                                                     "username": proxy_setting.username,
-                                                                     "password": proxy_setting.password}, args=[
+            browser = await p.chromium.launch(headless=False, proxy={
+                "server": data.proxy.server,
+                "username": data.proxy.username,
+                "password": data.proxy.password
+            }, args=[
                 "--disable-gpu",
                 '--no-sandbox',
                 '--disable-dev-shm-usage',
@@ -63,30 +64,22 @@ async def pw_challenge(data: ChallengeRequest):
             ])
             page = await browser.new_page()
             await async_stealth(page, pure=True)
+            user_agent = await page.evaluate("() => navigator.userAgent")
             await page.goto(data.url)
             success = await async_cf_retry(page)
-            cf_clearance_value = None
-            if not success:
-                await browser.close()
-                return {"success": success, "user_agent": None, "cf_clearance_value": None, "msg": "cf challenge fail"}
-            cookies = await page.context.cookies()
-            for cookie in cookies:
-                if cookie.get('name') == 'cf_clearance':
-                    cf_clearance_value = cookie.get('value')
-            ua = await page.evaluate('() => {return navigator.userAgent}')
-            await browser.close()
-            return {"success": success, "user_agent": ua, "cf_clearance_value": cf_clearance_value}
+            cookies = {c["name"]: c["value"] for c in await page.context.cookies()}
+    return {'success': success, 'user_agent': user_agent, 'cookies': cookies}
 
 
 @app.post("/challenge", response_model=ChallengeResponse)
 async def cf_challenge(data: ChallengeRequest):
     try:
-        res = await asyncio.wait_for(pw_challenge(data), timeout=data.timeout)
+        return await asyncio.wait_for(pw_challenge(data), timeout=data.timeout)
     except asyncio.TimeoutError:
-        return {"success": False, "msg": "challenge timeout"}
-    except RecaptchaChallengeException as e:
-        return {"success": False, "msg": str(e)}
+        return JSONResponse({"success": False, "msg": "challenge timeout"}, status_code=408)
     except Exception as e:
-        return {"success": False, "msg": str(e)}
-    else:
-        return res
+        return JSONResponse({"success": False, "msg": str(e)}, status_code=500)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
