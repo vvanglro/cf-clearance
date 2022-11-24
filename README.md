@@ -33,7 +33,7 @@ curl http://localhost:8000/challenge -H "Content-Type:application/json" -X POST 
 ## Install
 
 ```
-$ pip install cf-clearance
+pip install cf-clearance
 ```
 
 ## Usage
@@ -41,7 +41,11 @@ $ pip install cf-clearance
 Please make sure it is the latest package.
 
 ```
-$ pip install --upgrade cf-clearance
+pip install --upgrade cf-clearance
+```
+or
+```shell
+pip install git+https://github.com/vvanglro/cf-clearance.git@main
 ```
 
 ### sync
