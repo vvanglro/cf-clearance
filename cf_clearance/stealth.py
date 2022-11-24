@@ -45,10 +45,10 @@ class StealthConfig:
         ```
     """
     # load script options
-    chrome_fp: bool = False
-    chrome_global: bool = False
-    chrome_touch: bool = False
-    navigator_permissions: bool = False
+    chrome_fp: bool = True
+    chrome_global: bool = True
+    chrome_touch: bool = True
+    navigator_permissions: bool = True
     navigator_webdriver: bool = True
     chrome_runtime: bool = True
     chrome_plugin: bool = True
