@@ -9,7 +9,7 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
     while tries != 0:
         await page.wait_for_timeout(1500)
         try:
-            success = (False if await page.query_selector('#challenge-form') else True)
+            success = False if await page.query_selector("#challenge-form") else True
         except Error:
             success = False
         if success:
@@ -23,7 +23,7 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
     while tries != 0:
         page.wait_for_timeout(1500)
         try:
-            success = (False if page.query_selector('#challenge-form') else True)
+            success = False if page.query_selector("#challenge-form") else True
         except Error:
             success = False
         if success:

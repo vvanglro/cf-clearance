@@ -12,12 +12,12 @@ the cf_clearance, make sure you use the same IP and UA as when you got it.
 
 ## Warning
 
-Please use interface mode, You must add headless=False.  
+Please use interface mode, You must add headless=False.
 If you use it on linux or docker, use XVFB.
 
 ## Docker
 
-Recommended to install using a Docker container.  
+Recommended to install using a Docker container.
 DockerHub => https://hub.docker.com/r/vvanglro/cf-clearance
 
 ```shell

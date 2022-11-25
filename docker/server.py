@@ -3,18 +3,23 @@ import asyncio
 from fastapi import FastAPI
 from playwright.async_api import async_playwright
 from pydantic import BaseModel, Field
+from pyvirtualdisplay import Display
 
 from cf_clearance import async_cf_retry, async_stealth
-
-from pyvirtualdisplay import Display
 
 app = FastAPI()
 
 
 class ProxySetting(BaseModel):
     server: str = Field(...)
-    username: str = Field("", description="Optional username to use if HTTP proxy requires authentication.")
-    password: str = Field("", description="Optional password to use if HTTP proxy requires authentication.")
+    username: str = Field(
+        "",
+        description="Optional username to use if HTTP proxy requires authentication.",
+    )
+    password: str = Field(
+        "",
+        description="Optional password to use if HTTP proxy requires authentication.",
+    )
 
 
 class ChallengeRequest(BaseModel):
@@ -24,12 +29,10 @@ class ChallengeRequest(BaseModel):
 
     class Config:
         schema_extra = {
-            'example': {
-                "proxy": {
-                    "server": "socks5://localhost:7890"
-                },
+            "example": {
+                "proxy": {"server": "socks5://localhost:7890"},
                 "timeout": 20,
-                "url": "https://nowsecure.nl"
+                "url": "https://nowsecure.nl",
             },
         }
 
@@ -47,19 +50,23 @@ async def pw_challenge(data: ChallengeRequest):
     # https://github.com/microsoft/playwright/issues/6319
     with Display():
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False, proxy={
-                "server": data.proxy.server,
-                "username": data.proxy.username,
-                "password": data.proxy.password
-            }, args=[
-                "--disable-gpu",
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                '--no-first-run',
-                '--no-service-autorun',
-                '--no-default-browser-check',
-                '--password-store=basic',
-            ])
+            browser = await p.chromium.launch(
+                headless=False,
+                proxy={
+                    "server": data.proxy.server,
+                    "username": data.proxy.username,
+                    "password": data.proxy.password,
+                },
+                args=[
+                    "--disable-gpu",
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                    "--no-first-run",
+                    "--no-service-autorun",
+                    "--no-default-browser-check",
+                    "--password-store=basic",
+                ],
+            )
             page = await browser.new_page()
             await async_stealth(page, pure=True)
             await page.goto(data.url)
@@ -68,9 +75,17 @@ async def pw_challenge(data: ChallengeRequest):
                 await browser.close()
                 return {"success": success, "msg": "cf challenge fail"}
             user_agent = await page.evaluate("() => navigator.userAgent")
-            cookies = {cookie["name"]: cookie["value"] for cookie in await page.context.cookies()}
+            cookies = {
+                cookie["name"]: cookie["value"]
+                for cookie in await page.context.cookies()
+            }
             await browser.close()
-    return {'success': success, 'user_agent': user_agent, 'cookies': cookies, "msg": "cf challenge success"}
+    return {
+        "success": success,
+        "user_agent": user_agent,
+        "cookies": cookies,
+        "msg": "cf challenge success",
+    }
 
 
 @app.post("/challenge", response_model=ChallengeResponse)
