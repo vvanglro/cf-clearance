@@ -1,0 +1,30 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.114
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--filter-files"]
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+  - repo: local
+    hooks:
+      - id: python-no-print
+        name: check for print()
+        description: 'A quick check for the `print()` built-in function'
+        entry: '\bprint\('
+        language: pygrep
+        types: [ python ]
