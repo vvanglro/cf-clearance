@@ -1,7 +1,6 @@
 import asyncio
 
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 from playwright.async_api import async_playwright
 from pydantic import BaseModel, Field
 
@@ -60,15 +59,18 @@ async def pw_challenge(data: ChallengeRequest):
                 '--no-service-autorun',
                 '--no-default-browser-check',
                 '--password-store=basic',
-                '--start-maximized',
             ])
             page = await browser.new_page()
             await async_stealth(page, pure=True)
-            user_agent = await page.evaluate("() => navigator.userAgent")
             await page.goto(data.url)
             success = await async_cf_retry(page)
-            cookies = {c["name"]: c["value"] for c in await page.context.cookies()}
-    return {'success': success, 'user_agent': user_agent, 'cookies': cookies}
+            if not success:
+                await browser.close()
+                return {"success": success, "msg": "cf challenge fail"}
+            user_agent = await page.evaluate("() => navigator.userAgent")
+            cookies = {cookie["name"]: cookie["value"] for cookie in await page.context.cookies()}
+            await browser.close()
+    return {'success': success, 'user_agent': user_agent, 'cookies': cookies, "msg": "cf challenge success"}
 
 
 @app.post("/challenge", response_model=ChallengeResponse)
@@ -76,10 +78,12 @@ async def cf_challenge(data: ChallengeRequest):
     try:
         return await asyncio.wait_for(pw_challenge(data), timeout=data.timeout)
     except asyncio.TimeoutError:
-        return JSONResponse({"success": False, "msg": "challenge timeout"}, status_code=408)
+        return {"success": False, "msg": "challenge timeout"}
     except Exception as e:
-        return JSONResponse({"success": False, "msg": str(e)}, status_code=500)
+        return {"success": False, "msg": str(e)}
+
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
