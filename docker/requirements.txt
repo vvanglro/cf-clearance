@@ -1,4 +1,4 @@
 fastapi==0.85.0
 uvicorn==0.18.3
-cf-clearance==1.28.0
+cf-clearance==0.28.1
 pyvirtualdisplay==3.0
