@@ -21,7 +21,7 @@ Recommended to install using a Docker container.
 DockerHub => https://hub.docker.com/r/vvanglro/cf-clearance
 
 ```shell
-docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v1.28.0 \
+docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v0.28.1 \
 --host 0.0.0.0 --port 8000 --workers 1
 ```
 
