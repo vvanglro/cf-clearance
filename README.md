@@ -4,8 +4,6 @@
 [![Package version](https://img.shields.io/pypi/v/cf_clearance?color=%2334D058&label=pypi%20package)](https://pypi.python.org/pypi/cf_clearance)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/cf_clearance.svg?color=%2334D058)](https://pypi.python.org/pypi/cf_clearance)
 
-Reference from [playwright_stealth](https://github.com/AtuboDad/playwright_stealth)
-and [undetected-chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver)
 
 Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with
 the cf_clearance, make sure you use the same IP and UA as when you got it.
@@ -33,7 +31,7 @@ curl http://localhost:8000/challenge -H "Content-Type:application/json" -X POST 
 ## Install
 
 ```
-pip install cf-clearance
+pip install cf-clearance==0.28.1
 ```
 
 ## Usage
@@ -41,7 +39,7 @@ pip install cf-clearance
 Please make sure it is the latest package.
 
 ```
-pip install --upgrade cf-clearance
+pip install --upgrade cf-clearance==0.28.1
 ```
 or
 ```shell
