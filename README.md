@@ -19,7 +19,7 @@ Recommended to install using a Docker container.
 DockerHub => https://hub.docker.com/r/vvanglro/cf-clearance
 
 ```shell
-docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v0.28.1 \
+docker run -d --restart always --network host --name cf-clearance vvanglro/cf-clearance:v0.28.2 \
 --host 0.0.0.0 --port 8000 --workers 1
 ```
 
@@ -31,7 +31,7 @@ curl http://localhost:8000/challenge -H "Content-Type:application/json" -X POST 
 ## Install
 
 ```
-pip install cf-clearance==0.28.1
+pip install cf-clearance==0.28.2
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ pip install cf-clearance==0.28.1
 Please make sure it is the latest package.
 
 ```
-pip install --upgrade cf-clearance==0.28.1
+pip install --upgrade cf-clearance
 ```
 or
 ```shell
