@@ -7,5 +7,6 @@ WORKDIR /workspace/
 ADD . /workspace/
 
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
-ENTRYPOINT ["uvicorn", "server:app"]
+    pip install -r docker/requirements.txt
+
+ENTRYPOINT ["uvicorn", "docker.server:app"]
