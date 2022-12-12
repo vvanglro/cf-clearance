@@ -23,7 +23,7 @@ class ProxySetting(BaseModel):
 
 
 class ChallengeRequest(BaseModel):
-    proxy: ProxySetting = Field(...)
+    proxy: ProxySetting = Field(None)
     timeout: int = Field(10)
     url: str = Field(...)
 
@@ -45,28 +45,31 @@ class ChallengeResponse(BaseModel):
 
 
 async def pw_challenge(data: ChallengeRequest):
+    launch_data = {
+        "headless": False,
+        "proxy": {
+            "server": data.proxy.server,
+            "username": data.proxy.username,
+            "password": data.proxy.password,
+        }
+        if data.proxy
+        else None,
+        "args": [
+            "--disable-gpu",
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--no-first-run",
+            "--no-service-autorun",
+            "--no-default-browser-check",
+            "--password-store=basic",
+        ],
+    }
     # Create a new context for each request:
     # https://github.com/microsoft/playwright/issues/17736#issuecomment-1263667429
     # https://github.com/microsoft/playwright/issues/6319
     with Display():
         async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=False,
-                proxy={
-                    "server": data.proxy.server,
-                    "username": data.proxy.username,
-                    "password": data.proxy.password,
-                },
-                args=[
-                    "--disable-gpu",
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--no-first-run",
-                    "--no-service-autorun",
-                    "--no-default-browser-check",
-                    "--password-store=basic",
-                ],
-            )
+            browser = await p.chromium.launch(**launch_data)
             page = await browser.new_page()
             await async_stealth(page, pure=True)
             await page.goto(data.url)
@@ -96,9 +99,3 @@ async def cf_challenge(data: ChallengeRequest):
         return {"success": False, "msg": "challenge timeout"}
     except Exception as e:
         return {"success": False, "msg": str(e)}
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
