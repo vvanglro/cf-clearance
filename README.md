@@ -16,7 +16,7 @@ If you use it on linux or docker, use XVFB.
 
 ## Docker Usage
 
-Recommended to install using a Docker container.
+Recommended to install using Docker container on Ubuntu server.  
 DockerHub => https://hub.docker.com/r/vvanglro/cf-clearance
 
 ```shell
