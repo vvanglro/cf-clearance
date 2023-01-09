@@ -14,6 +14,9 @@ the cf_clearance, make sure you use the same IP and UA as when you got it.
 Please use interface mode, You must add headless=False.
 If you use it on linux or docker, use XVFB.
 
+Challenge are not always successful. Please try more and handle exceptions.
+
+
 ## Docker Usage
 
 Recommended to install using Docker container on Ubuntu server.  
