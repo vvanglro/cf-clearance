@@ -48,7 +48,7 @@ if resp.json().get("success"):
     res = requests.get('https://nowsecure.nl', proxies={
         "all": proxy
     }, headers=headers, cookies=cookies)
-    if '<title>Please Wait... | Cloudflare</title>' not in res.text:
+    if '<title>Just a moment...</title>' not in res.text:
         print("cf challenge success")
 ```
 
@@ -82,7 +82,7 @@ proxies = {
     "all": "socks5://localhost:7890"
 }
 res = requests.get('https://nowsecure.nl', proxies=proxies)
-if '<title>Please Wait... | Cloudflare</title>' in res.text:
+if '<title>Just a moment...</title>' in res.text:
     print("cf challenge fail")
 # get cf_clearance
 with sync_playwright() as p:
@@ -106,7 +106,7 @@ with sync_playwright() as p:
 headers = {"user-agent": ua}
 cookies = {"cf_clearance": cf_clearance_value}
 res = requests.get('https://nowsecure.nl', proxies=proxies, headers=headers, cookies=cookies)
-if '<title>Please Wait... | Cloudflare</title>' not in res.text:
+if '<title>Just a moment...</title>' not in res.text:
     print("cf challenge success")
 ```
 
@@ -125,7 +125,7 @@ async def main():
         "all": "socks5://localhost:7890"
     }
     res = requests.get('https://nowsecure.nl', proxies=proxies)
-    if '<title>Please Wait... | Cloudflare</title>' in res.text:
+    if '<title>Just a moment...</title>' in res.text:
         print("cf challenge fail")
     # get cf_clearance
     async with async_playwright() as p:
@@ -149,7 +149,7 @@ async def main():
     headers = {"user-agent": ua}
     cookies = {"cf_clearance": cf_clearance_value}
     res = requests.get('https://nowsecure.nl', proxies=proxies, headers=headers, cookies=cookies)
-    if '<title>Please Wait... | Cloudflare</title>' not in res.text:
+    if '<title>Just a moment...</title>' not in res.text:
         print("cf challenge success")
 
 
