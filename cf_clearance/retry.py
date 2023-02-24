@@ -10,6 +10,19 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
         await page.wait_for_timeout(1500)
         try:
             success = False if await page.query_selector("#challenge-form") else True
+            click_button = await page.query_selector("#challenge-stage > div > input")
+            if click_button:
+                await click_button.click()
+            iframe = await page.query_selector(
+                "xpath=//div[@class='hcaptcha-box']/iframe"
+            )
+            if iframe:
+                switch_iframe = await iframe.content_frame()
+                iframe_button = await switch_iframe.query_selector(
+                    "xpath=//*[@id='cf-stage']//label/span"
+                )
+                if iframe_button:
+                    await iframe_button.click()
         except Error:
             success = False
         if success:
@@ -24,9 +37,20 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
         page.wait_for_timeout(1500)
         try:
             success = False if page.query_selector("#challenge-form") else True
+            click_button = page.query_selector("#challenge-stage > div > input")
+            if click_button:
+                click_button.click()
+            iframe = page.query_selector("xpath=//div[@class='hcaptcha-box']/iframe")
+            if iframe:
+                iframe_button = iframe.content_frame().query_selector(
+                    "xpath=//*[@id='cf-stage']//label/span"
+                )
+                if iframe_button:
+                    iframe_button.click()
         except Error:
             success = False
         if success:
             break
         tries -= 1
+
     return success
