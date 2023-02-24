@@ -193,11 +193,37 @@
                 refreshValue = value;
             },
         },
+        namedItem: {
+            value: function namedItem(name) {
+                '{ [native code] }';
+                switch (name) {
+                    case 'PDF Viewer':
+                        return plugin3;
+                    case 'Chrome PDF Viewer':
+                        return plugin0;
+                    case 'Chromium PDF Viewer':
+                        return plugin1;
+                    case 'Microsoft Edge PDF Viewer':
+                        return plugin2;
+                    case 'WebKit built-in PDF':
+                        return plugin4;
+                    default:
+                        return undefined;
+                }
+            },
+        },
     });
 
     Object.defineProperty(Object.getPrototypeOf(navigator), 'plugins', {
         get: () => {
+            '[native code]';
             return pluginArray;
         },
     });
+    Object.getOwnPropertyDescriptor(
+        Object.getPrototypeOf(navigator),
+        'plugins'
+    ).get.toString = function toString() {
+        return 'function get plugins() { [native code] }';
+    };
 })();
