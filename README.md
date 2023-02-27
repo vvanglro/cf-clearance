@@ -6,7 +6,7 @@
 [![Docker Image versions](https://img.shields.io/docker/v/vvanglro/cf-clearance?color=%2334D058&label=docker%20version)](https://hub.docker.com/r/vvanglro/cf-clearance)
 
 
-Purpose To make a cloudflare challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with
+Purpose To make a cloudflare v2 challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with
 the cf_clearance, make sure you use the same IP and UA as when you got it.
 
 ## Warning
