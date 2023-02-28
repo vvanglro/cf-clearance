@@ -26,6 +26,7 @@ class ChallengeRequest(BaseModel):
     proxy: ProxySetting = Field(None)
     timeout: int = Field(10)
     url: str = Field(...)
+    pure: bool = Field(False)
 
     class Config:
         schema_extra = {
@@ -33,6 +34,7 @@ class ChallengeRequest(BaseModel):
                 "proxy": {"server": "socks5://localhost:7890"},
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
+                "pure": False
             },
         }
 
@@ -42,6 +44,7 @@ class ChallengeResponse(BaseModel):
     msg: str = Field(None)
     user_agent: str = Field(None)
     cookies: dict = Field(None)
+    content: str = Field(None)
 
 
 async def pw_challenge(data: ChallengeRequest):
@@ -71,7 +74,7 @@ async def pw_challenge(data: ChallengeRequest):
         async with async_playwright() as p:
             browser = await p.chromium.launch(**launch_data)
             page = await browser.new_page()
-            await async_stealth(page, pure=True)
+            await async_stealth(page, pure=data.pure)
             await page.goto(data.url)
             success = await async_cf_retry(page)
             if not success:
@@ -82,12 +85,14 @@ async def pw_challenge(data: ChallengeRequest):
                 cookie["name"]: cookie["value"]
                 for cookie in await page.context.cookies()
             }
+            content = await page.content()
             await browser.close()
     return {
         "success": success,
         "user_agent": user_agent,
         "cookies": cookies,
         "msg": "cf challenge success",
+        "content": content,
     }
 
 
