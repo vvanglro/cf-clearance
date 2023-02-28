@@ -55,7 +55,7 @@ if resp.json().get("success"):
 ## Install
 
 ```
-pip install cf-clearance==0.28.2
+pip install cf-clearance
 ```
 
 ## Usage
