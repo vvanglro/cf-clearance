@@ -8,17 +8,18 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
     success = False
     while tries > 0:
         await page.wait_for_timeout(1500)
-        success = False if await page.query_selector("#challenge-form") else True
-        if success:
-            break
         try:
+            success = False if await page.query_selector("#challenge-form") else True
+            if success:
+                break
             simple_challenge = await page.query_selector(
                 "#challenge-stage > div > input[type='button']"
             )
             if simple_challenge:
                 await simple_challenge.click()
             turnstile_challenge = await page.query_selector(
-                "xpath=//iframe[starts-with(@src, 'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile')]"
+                "xpath=//iframe[starts-with(@src, "
+                "'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile')]"
             )
             if turnstile_challenge:
                 turnstile = await turnstile_challenge.content_frame()
@@ -37,17 +38,18 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
     success = False
     while tries > 0:
         page.wait_for_timeout(1500)
-        success = False if page.query_selector("#challenge-form") else True
-        if success:
-            break
         try:
+            success = False if page.query_selector("#challenge-form") else True
+            if success:
+                break
             simple_challenge = page.query_selector(
                 "#challenge-stage > div > input[type='button']"
             )
             if simple_challenge:
                 simple_challenge.click()
             turnstile_challenge = page.query_selector(
-                "xpath=//iframe[starts-with(@src, 'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile')]"
+                "xpath=//iframe[starts-with(@src, "
+                "'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile')]"
             )
             if turnstile_challenge:
                 turnstile = turnstile_challenge.content_frame()
