@@ -8,8 +8,10 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
     success = False
     while tries > 0:
         await page.wait_for_timeout(1500)
+        success = False if await page.query_selector("#challenge-form") else True
+        if success:
+            break
         try:
-            success = False if await page.query_selector("#challenge-form") else True
             simple_challenge = await page.query_selector(
                 "#challenge-stage > div > input[type='button']"
             )
@@ -27,8 +29,6 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
                     await turnstile_button.click()
         except Error:
             success = False
-        if success:
-            break
         tries -= 1
     return success
 
@@ -37,6 +37,9 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
     success = False
     while tries > 0:
         page.wait_for_timeout(1500)
+        success = False if page.query_selector("#challenge-form") else True
+        if success:
+            break
         try:
             simple_challenge = page.query_selector(
                 "#challenge-stage > div > input[type='button']"
@@ -55,8 +58,6 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
                     turnstile_button.click()
         except Error:
             success = False
-        if success:
-            break
         tries -= 1
 
     return success
