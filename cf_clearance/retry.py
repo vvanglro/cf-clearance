@@ -18,8 +18,7 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
             if simple_challenge:
                 await simple_challenge.click()
             turnstile_challenge = await page.query_selector(
-                "xpath=//iframe[starts-with(@src, "
-                "'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile')]"
+                "xpath=//div[@class='hcaptcha-box']/iframe"
             )
             if turnstile_challenge:
                 turnstile = await turnstile_challenge.content_frame()
@@ -48,8 +47,7 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
             if simple_challenge:
                 simple_challenge.click()
             turnstile_challenge = page.query_selector(
-                "xpath=//iframe[starts-with(@src, "
-                "'https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile')]"
+                "xpath=//div[@class='hcaptcha-box']/iframe"
             )
             if turnstile_challenge:
                 turnstile = turnstile_challenge.content_frame()
