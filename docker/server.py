@@ -34,7 +34,7 @@ class ChallengeRequest(BaseModel):
                 "proxy": {"server": "socks5://localhost:7890"},
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
-                "pure": False
+                "pure": False,
             },
         }
 
