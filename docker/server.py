@@ -2,6 +2,7 @@ import asyncio
 
 from fastapi import FastAPI
 from playwright.async_api import async_playwright
+from playwright import async_api
 from pydantic import BaseModel, Field
 from pyvirtualdisplay import Display
 
@@ -27,6 +28,7 @@ class ChallengeRequest(BaseModel):
     timeout: int = Field(10)
     url: str = Field(...)
     pure: bool = Field(False)
+    cookies: dict = Field(None)
 
     class Config:
         schema_extra = {
@@ -35,6 +37,7 @@ class ChallengeRequest(BaseModel):
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
                 "pure": False,
+                "cookies": {"key": "value"},
             },
         }
 
@@ -73,7 +76,13 @@ async def pw_challenge(data: ChallengeRequest):
     with Display():
         async with async_playwright() as p:
             browser = await p.chromium.launch(**launch_data)
-            page = await browser.new_page()
+            page = await browser.new_page(
+                storage_state=async_api.StorageState(
+                    cookies=[{"name": k, "value": v} for k, v in data.cookies.items()]
+                )
+                if data.cookies
+                else None
+            )
             await async_stealth(page, pure=data.pure)
             await page.goto(data.url)
             success = await async_cf_retry(page)
