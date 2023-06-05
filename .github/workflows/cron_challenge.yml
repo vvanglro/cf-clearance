@@ -20,5 +20,6 @@ jobs:
           python -m pip install --upgrade poetry
           poetry install
           poetry run playwright install chromium
+          apt install xvfb
       - name: Run script
-        run: poetry run python tests/test_cron_challenge.py
+        run: xvfb-run poetry run python tests/test_cron_challenge.py
