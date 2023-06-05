@@ -1,0 +1,31 @@
+from playwright.async_api import async_playwright
+
+from cf_clearance import async_stealth, async_cf_retry
+
+
+async def test_cf_challenge(url: str):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=False)
+        context = await browser.new_context()
+        page = await context.new_page()
+        await async_stealth(page, pure=True)
+        await page.goto(url)
+        res = await async_cf_retry(page)
+        if res:
+            cookies = await page.context.cookies()
+            for cookie in cookies:
+                if cookie.get('name') == 'cf_clearance':
+                    cf_clearance_value = cookie.get('value')
+                    print(cf_clearance_value)
+            ua = await page.evaluate('() => {return navigator.userAgent}')
+            print(ua)
+        else:
+            print("cf challenge fail")
+        assert cf_clearance_value
+        await browser.close()
+
+
+if __name__ == '__main__':
+    import asyncio
+
+    asyncio.run(test_cf_challenge("https://nowsecure.nl"))
