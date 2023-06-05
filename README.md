@@ -9,6 +9,10 @@
 Purpose To make a cloudflare v2 challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with
 the cf_clearance, make sure you use the same IP and UA as when you got it.
 
+## Project Pass Challenge Status
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/vvanglro/cf-clearance/cron_challenge.yml?style=plastic">
+
+
 ## Warning
 
 Please use interface mode, You must add headless=False.
