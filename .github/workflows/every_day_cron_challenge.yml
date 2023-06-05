@@ -1,4 +1,4 @@
-name: Cron Challenge
+name: Every day cron challenge
 
 on:
   schedule:
