@@ -10,8 +10,7 @@ Purpose To make a cloudflare v2 challenge pass successfully, Can be use cf_clear
 the cf_clearance, make sure you use the same IP and UA as when you got it.
 
 ## Project Pass Challenge Status
-[![Cron Challenge](https://github.com/vvanglro/cf-clearance/actions/workflows/cron_challenge.yml/badge.svg)](https://github.com/vvanglro/cf-clearance/actions/workflows/cron_challenge.yml)
-
+[![Every day cron challenge](https://github.com/vvanglro/cf-clearance/actions/workflows/every_day_cron_challenge.yml/badge.svg)](https://github.com/vvanglro/cf-clearance/actions/workflows/every_day_cron_challenge.yml)
 
 ## Warning
 
