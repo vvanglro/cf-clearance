@@ -66,9 +66,9 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
             for targetFrame in page.main_frame.child_frames:
                 if targetFrame.url.__contains__('challenges'):
                     print('success locate child frame')
-                    click = await targetFrame.query_selector("xpath=//input[@type='checkbox']")
+                    click = targetFrame.query_selector("xpath=//input[@type='checkbox']")
                     if click:
-                        await click.click()
+                        click.click()
                         print('frame click success')
         except Error:
             success = False
