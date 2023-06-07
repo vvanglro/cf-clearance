@@ -17,16 +17,10 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
             )
             if simple_challenge:
                 await simple_challenge.click()
-            turnstile_challenge = await page.query_selector(
-                "xpath=//div[@class='hcaptcha-box']/iframe"
-            )
-            if turnstile_challenge:
-                turnstile = await turnstile_challenge.content_frame()
-                turnstile_button = await turnstile.query_selector(
-                    "xpath=//input[@type='checkbox']"
-                )
-                if turnstile_button:
-                    await turnstile_button.click()
+            for target_frame in page.main_frame.child_frames:
+                click = await target_frame.query_selector("xpath=//input[@type='checkbox']")
+                if click:
+                    await click.click()
         except Error:
             success = False
         tries -= 1
@@ -46,16 +40,10 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
             )
             if simple_challenge:
                 simple_challenge.click()
-            turnstile_challenge = page.query_selector(
-                "xpath=//div[@class='hcaptcha-box']/iframe"
-            )
-            if turnstile_challenge:
-                turnstile = turnstile_challenge.content_frame()
-                turnstile_button = turnstile.query_selector(
-                    "xpath=//input[@type='checkbox']"
-                )
-                if turnstile_button:
-                    turnstile_button.click()
+            for target_frame in page.main_frame.child_frames:
+                click = target_frame.query_selector("xpath=//input[@type='checkbox']")
+                if click:
+                    click.click()
         except Error:
             success = False
         tries -= 1
