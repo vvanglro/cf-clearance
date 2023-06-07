@@ -1,6 +1,6 @@
 from playwright.async_api import async_playwright
 
-from cf_clearance import async_stealth, async_cf_retry
+from cf_clearance import async_cf_retry, async_stealth
 
 
 async def test_cf_challenge(url: str):
@@ -14,18 +14,13 @@ async def test_cf_challenge(url: str):
         if res:
             cookies = await page.context.cookies()
             for cookie in cookies:
-                if cookie.get('name') == 'cf_clearance':
-                    cf_clearance_value = cookie.get('value')
-                    print(cf_clearance_value)
-            ua = await page.evaluate('() => {return navigator.userAgent}')
-            print(ua)
-        else:
-            print("cf challenge fail")
+                if cookie.get("name") == "cf_clearance":
+                    cf_clearance_value = cookie.get("value")
         assert cf_clearance_value
         await browser.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import asyncio
 
     asyncio.run(test_cf_challenge("https://nowsecure.nl"))

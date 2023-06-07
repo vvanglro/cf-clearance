@@ -18,7 +18,9 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
             if simple_challenge:
                 await simple_challenge.click()
             for target_frame in page.main_frame.child_frames:
-                click = await target_frame.query_selector("xpath=//input[@type='checkbox']")
+                click = await target_frame.query_selector(
+                    "xpath=//input[@type='checkbox']"
+                )
                 if click:
                     await click.click()
         except Error:
