@@ -18,11 +18,12 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> bool:
             if simple_challenge:
                 await simple_challenge.click()
             for target_frame in page.main_frame.child_frames:
-                click = await target_frame.query_selector(
-                    "xpath=//input[@type='checkbox']"
-                )
-                if click:
-                    await click.click()
+                if "challenge" in target_frame.url and "turnstile" in target_frame.url:
+                    click = await target_frame.query_selector(
+                        "xpath=//input[@type='checkbox']"
+                    )
+                    if click:
+                        await click.click()
         except Error:
             success = False
         tries -= 1
@@ -43,9 +44,12 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> bool:
             if simple_challenge:
                 simple_challenge.click()
             for target_frame in page.main_frame.child_frames:
-                click = target_frame.query_selector("xpath=//input[@type='checkbox']")
-                if click:
-                    click.click()
+                if "challenge" in target_frame.url and "turnstile" in target_frame.url:
+                    click = target_frame.query_selector(
+                        "xpath=//input[@type='checkbox']"
+                    )
+                    if click:
+                        click.click()
         except Error:
             success = False
         tries -= 1
