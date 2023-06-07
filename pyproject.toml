@@ -12,6 +12,10 @@ requires-python = ">=3.7,<4"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 
+[project.urls]
+Homepage = "https://github.com/vvanglro/cf_clearance"
+Repository = "https://github.com/vvanglro/cf_clearance"
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
