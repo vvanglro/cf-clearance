@@ -156,3 +156,4 @@ tmp.sh
 statics/
 log.txt
 /poetry.lock
+.pdm-python
