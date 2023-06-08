@@ -17,9 +17,9 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade poetry
-          poetry install
-          poetry run playwright install chromium
+          python -m pip install --upgrade pdm
+          pdm install
+          pdm run playwright install chromium
           sudo apt install xvfb
       - name: Run script
-        run: xvfb-run poetry run python tests/test_cron_challenge.py
+        run: xvfb-run pdm run python tests/test_cron_challenge.py
