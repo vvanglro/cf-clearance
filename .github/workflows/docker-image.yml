@@ -37,7 +37,9 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}-amd64
+            latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker Arm image
@@ -47,5 +49,7 @@ jobs:
           file: ./docker/Dockerfile_Arm
           push: true
           platforms: linux/arm64
-          tags: ${{ steps.meta.outputs.tags }}-arm64
+          tags: |
+            ${{ steps.meta.outputs.tags }}-arm64
+            latest-arm64
           labels: ${{ steps.meta.outputs.labels }}
