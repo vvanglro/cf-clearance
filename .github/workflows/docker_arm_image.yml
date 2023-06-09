@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Publish Docker Arm Image
 
 on:
   push:
@@ -26,15 +26,6 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: vvanglro/cf-clearance
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ./docker/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker Arm image
         uses: docker/build-push-action@v3
