@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+      - uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm64
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -33,5 +36,6 @@ jobs:
           context: .
           file: ./docker/Dockerfile_Arm
           push: true
+          platforms: linux/arm64
           tags: ${{ steps.meta.outputs.tags }}-arm64
           labels: ${{ steps.meta.outputs.labels }}
