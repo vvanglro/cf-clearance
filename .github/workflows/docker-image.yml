@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
 
 jobs:
   push_to_registry:
@@ -33,4 +34,13 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker Arm image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./docker/Dockerfile_Arm
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-arm64
           labels: ${{ steps.meta.outputs.labels }}

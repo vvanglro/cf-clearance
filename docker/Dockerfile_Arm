@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/python:latest
+FROM mcr.microsoft.com/playwright/python:latest-arm64
 
 ENV PIP_ROOT_USER_ACTION=ignore
 
