@@ -11,6 +11,14 @@ dependencies = [
 requires-python = ">=3.7,<4"
 readme = "README.md"
 license = {text = "Apache-2.0"}
+classifiers=[
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ]
 
 [project.urls]
 Homepage = "https://github.com/vvanglro/cf_clearance"
