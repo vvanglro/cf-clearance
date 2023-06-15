@@ -6,7 +6,9 @@ RUN mkdir /workspace/
 WORKDIR /workspace/
 ADD . /workspace/
 
-RUN pip install --upgrade pip && \
-    pip install -r docker/requirements.txt
+RUN apt update && \
+    apt install dumb-init && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir -r docker/requirements.txt
 
-ENTRYPOINT ["uvicorn", "docker.server:app"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "uvicorn", "docker.server:app"]
