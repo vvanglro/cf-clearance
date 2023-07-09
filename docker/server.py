@@ -1,9 +1,11 @@
 import asyncio
+from typing import Dict, List, Literal, Optional
 
 from fastapi import FastAPI
 from playwright.async_api import async_playwright
 from pydantic import BaseModel, Field
 from pyvirtualdisplay import Display
+from typing_extensions import TypedDict
 
 from cf_clearance import async_cf_retry, async_stealth
 
@@ -14,14 +16,24 @@ class ProxySetting(BaseModel):
     server: str = Field(...)
     username: str = Field(
         "",
-        description=
-        "Optional username to use if HTTP proxy requires authentication.",
+        description="Optional username to use if HTTP proxy requires authentication.",
     )
     password: str = Field(
         "",
-        description=
-        "Optional password to use if HTTP proxy requires authentication.",
+        description="Optional password to use if HTTP proxy requires authentication.",
     )
+
+
+class SetCookieParam(TypedDict, total=False):
+    name: str
+    value: str
+    url: Optional[str]
+    domain: Optional[str]
+    path: Optional[str]
+    expires: Optional[float]
+    httpOnly: Optional[bool]
+    secure: Optional[bool]
+    sameSite: Optional[Literal["Lax", "None", "Strict"]]
 
 
 class ChallengeRequest(BaseModel):
@@ -29,18 +41,24 @@ class ChallengeRequest(BaseModel):
     timeout: int = Field(10)
     url: str = Field(...)
     pure: bool = Field(False)
-    cookies: list = Field(None)
-    headers: list = Field(None)
+    cookies: List[SetCookieParam] = Field(None)
+    headers: Dict[str, str] = Field(None)
 
     class Config:
         schema_extra = {
             "example": {
-                "proxy": {
-                    "server": "socks5://localhost:7890"
-                },
+                "proxy": {"server": "socks5://localhost:7890"},
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
                 "pure": False,
+                "cookies": [
+                    {
+                        "url": "https://www.example.com",
+                        "name": "example-cookie",
+                        "value": "example-value",
+                    }
+                ],
+                "headers": {"example-ua": "example-ua-value"},
             },
         }
 
@@ -50,18 +68,20 @@ class ChallengeResponse(BaseModel):
     msg: str = Field(None)
     user_agent: str = Field(None)
     cookies: dict = Field(None)
+    headers: dict = Field(None)
     content: str = Field(None)
 
 
 async def pw_challenge(data: ChallengeRequest):
     launch_data = {
-        "headless":
-        False,
+        "headless": False,
         "proxy": {
             "server": data.proxy.server,
             "username": data.proxy.username,
             "password": data.proxy.password,
-        } if data.proxy else None,
+        }
+        if data.proxy
+        else None,
         "args": [
             "--disable-gpu",
             "--no-sandbox",
@@ -85,7 +105,7 @@ async def pw_challenge(data: ChallengeRequest):
                 await ctx.set_extra_http_headers(data.headers)
             page = await ctx.new_page()
             await async_stealth(page, pure=data.pure)
-            await page.goto(data.url)
+            resp = await page.goto(data.url)
             success = await async_cf_retry(page)
             if not success:
                 await browser.close()
@@ -103,6 +123,7 @@ async def pw_challenge(data: ChallengeRequest):
         "cookies": cookies,
         "msg": "cf challenge success",
         "content": content,
+        "headers": resp.headers,
     }
 
 
