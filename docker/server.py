@@ -14,11 +14,13 @@ class ProxySetting(BaseModel):
     server: str = Field(...)
     username: str = Field(
         "",
-        description="Optional username to use if HTTP proxy requires authentication.",
+        description=
+        "Optional username to use if HTTP proxy requires authentication.",
     )
     password: str = Field(
         "",
-        description="Optional password to use if HTTP proxy requires authentication.",
+        description=
+        "Optional password to use if HTTP proxy requires authentication.",
     )
 
 
@@ -27,11 +29,15 @@ class ChallengeRequest(BaseModel):
     timeout: int = Field(10)
     url: str = Field(...)
     pure: bool = Field(False)
+    cookies: list = Field(None)
+    headers: list = Field(None)
 
     class Config:
         schema_extra = {
             "example": {
-                "proxy": {"server": "socks5://localhost:7890"},
+                "proxy": {
+                    "server": "socks5://localhost:7890"
+                },
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
                 "pure": False,
@@ -49,14 +55,13 @@ class ChallengeResponse(BaseModel):
 
 async def pw_challenge(data: ChallengeRequest):
     launch_data = {
-        "headless": False,
+        "headless":
+        False,
         "proxy": {
             "server": data.proxy.server,
             "username": data.proxy.username,
             "password": data.proxy.password,
-        }
-        if data.proxy
-        else None,
+        } if data.proxy else None,
         "args": [
             "--disable-gpu",
             "--no-sandbox",
@@ -73,7 +78,12 @@ async def pw_challenge(data: ChallengeRequest):
     with Display():
         async with async_playwright() as p:
             browser = await p.chromium.launch(**launch_data)
-            page = await browser.new_page()
+            ctx = await browser.new_context()
+            if data.cookies:
+                await ctx.add_cookies(data.cookies)
+            if data.headers:
+                await ctx.set_extra_http_headers(data.headers)
+            page = await ctx.new_page()
             await async_stealth(page, pure=data.pure)
             await page.goto(data.url)
             success = await async_cf_retry(page)
