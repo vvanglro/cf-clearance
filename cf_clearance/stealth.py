@@ -56,7 +56,6 @@ class StealthConfig:
 
     @property
     def enabled_scripts(self):
-
         if self.chrome_fp:
             yield SCRIPTS["chrome_fp"]
         if self.chrome_global:
