@@ -43,7 +43,8 @@ resp = requests.post("http://localhost:8000/challenge",
                      json={"proxy": {"server": proxy}, "timeout": 20,
                            "url": "https://nowsecure.nl"})
 data = resp.json()
-# In some cases, the cloudflare challenge will not be triggered, so when cf in the return parameter is true, it means that the challenge has been encountered.
+# In some cases, the cloudflare challenge will not be triggered, 
+# so when cf in the return parameter is true, it means that the challenge has been encountered.
 if data.get("success") and data.get("cf"):
     ua = data.get("user_agent")
     cf_clearance_value = data.get("cookies").get("cf_clearance")
