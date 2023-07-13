@@ -23,4 +23,5 @@ async def test_cf_challenge(url: str):
 if __name__ == "__main__":
     import asyncio
 
-    asyncio.run(test_cf_challenge("https://nowsecure.nl"))
+    # asyncio.run(test_cf_challenge("https://nowsecure.nl"))
+    asyncio.run(test_cf_challenge("https://top.gg/"))
