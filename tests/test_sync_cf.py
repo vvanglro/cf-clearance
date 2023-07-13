@@ -30,10 +30,10 @@ def test_cf_challenge():
         page = content.new_page()
         sync_stealth(page, pure=True)
         page.goto("https://nowsecure.nl")
-        res = sync_cf_retry(page)
+        res, cf = sync_cf_retry(page)
         ua = None
         cf_clearance_value = None
-        if res:
+        if res and cf:
             cookies = page.context.cookies()
             for cookie in cookies:
                 if cookie.get("name") == "cf_clearance":

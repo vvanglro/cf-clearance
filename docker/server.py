@@ -65,6 +65,7 @@ class ChallengeRequest(BaseModel):
 
 class ChallengeResponse(BaseModel):
     success: bool = Field(True)
+    cf: bool = Field(True)
     msg: str = Field(None)
     user_agent: str = Field(None)
     cookies: dict = Field(None)
@@ -106,7 +107,7 @@ async def pw_challenge(data: ChallengeRequest):
             page = await ctx.new_page()
             await async_stealth(page, pure=data.pure)
             resp = await page.goto(data.url)
-            success = await async_cf_retry(page)
+            success, cf = await async_cf_retry(page)
             if not success:
                 await browser.close()
                 return {"success": success, "msg": "cf challenge fail"}
@@ -119,6 +120,7 @@ async def pw_challenge(data: ChallengeRequest):
             await browser.close()
     return {
         "success": success,
+        "cf": cf,
         "user_agent": user_agent,
         "cookies": cookies,
         "msg": "cf challenge success",

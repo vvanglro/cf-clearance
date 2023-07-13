@@ -42,7 +42,9 @@ proxy = "socks5://localhost:7890"
 resp = requests.post("http://localhost:8000/challenge",
                      json={"proxy": {"server": proxy}, "timeout": 20,
                            "url": "https://nowsecure.nl"})
-if resp.json().get("success"):
+data = resp.json()
+# In some cases, the cloudflare challenge will not be triggered, so when cf in the return parameter is true, it means that the challenge has been encountered.
+if data.get("success") and data.get("cf"):
     ua = resp.json().get("user_agent")
     cf_clearance_value = resp.json().get("cookies").get("cf_clearance")
     # use cf_clearance, must be same IP and UA
@@ -93,17 +95,20 @@ with sync_playwright() as p:
     page = browser.new_page()
     sync_stealth(page, pure=True)
     page.goto('https://nowsecure.nl')
-    res = sync_cf_retry(page)
-    if res:
-        cookies = page.context.cookies()
-        for cookie in cookies:
-            if cookie.get('name') == 'cf_clearance':
-                cf_clearance_value = cookie.get('value')
-                print(cf_clearance_value)
-        ua = page.evaluate('() => {return navigator.userAgent}')
-        print(ua)
+    res, cf = sync_cf_retry(page)
+    if cf:
+        if res:
+            cookies = page.context.cookies()
+            for cookie in cookies:
+                if cookie.get('name') == 'cf_clearance':
+                    cf_clearance_value = cookie.get('value')
+                    print(cf_clearance_value)
+            ua = page.evaluate('() => {return navigator.userAgent}')
+            print(ua)
+        else:
+            print("cf challenge fail")
     else:
-        print("cf challenge fail")
+        print("No cloudflare challenges encountered")
     browser.close()
 # use cf_clearance, must be same IP and UA
 headers = {"user-agent": ua}
@@ -136,17 +141,20 @@ async def main():
         page = await browser.new_page()
         await async_stealth(page, pure=True)
         await page.goto('https://nowsecure.nl')
-        res = await async_cf_retry(page)
-        if res:
-            cookies = await page.context.cookies()
-            for cookie in cookies:
-                if cookie.get('name') == 'cf_clearance':
-                    cf_clearance_value = cookie.get('value')
-                    print(cf_clearance_value)
-            ua = await page.evaluate('() => {return navigator.userAgent}')
-            print(ua)
+        res, cf = await async_cf_retry(page)
+        if cf:
+            if res:
+                cookies = await page.context.cookies()
+                for cookie in cookies:
+                    if cookie.get('name') == 'cf_clearance':
+                        cf_clearance_value = cookie.get('value')
+                        print(cf_clearance_value)
+                ua = await page.evaluate('() => {return navigator.userAgent}')
+                print(ua)
+            else:
+                print("cf challenge fail")
         else:
-            print("cf challenge fail")
+            print("No cloudflare challenges encountered")
         await browser.close()
     # use cf_clearance, must be same IP and UA
     headers = {"user-agent": ua}
