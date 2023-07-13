@@ -6,14 +6,13 @@ authors = [
     {name = "vvanglro", email = "vvanglro@gmail.com"},
 ]
 dependencies = [
-    "playwright>=1.34.0",
+    "playwright",
 ]
-requires-python = ">=3.7,<4"
+requires-python = ">=3.8,<4"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
@@ -30,7 +29,7 @@ build-backend = "pdm.backend"
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "pre-commit>=2.21.0",
+    "pre-commit>=3.3.3",
 ]
 
 [tool.ruff]
