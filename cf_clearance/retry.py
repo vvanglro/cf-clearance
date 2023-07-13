@@ -9,6 +9,7 @@ from playwright.sync_api import Page as SyncPage
 async def async_cf_retry(page: AsyncPage, tries: int = 10) -> Tuple[bool, bool]:
     success = False
     cf = True
+    user_tries = tries
     while tries > 0:
         await page.wait_for_timeout(1500)
         try:
@@ -30,7 +31,7 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> Tuple[bool, bool]:
         except Error:
             success = False
         tries -= 1
-    if tries == 10:
+    if tries == user_tries:
         cf = False
     return success, cf
 
@@ -38,6 +39,7 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> Tuple[bool, bool]:
 def sync_cf_retry(page: SyncPage, tries: int = 10) -> Tuple[bool, bool]:
     success = False
     cf = True
+    user_tries = tries
     while tries > 0:
         page.wait_for_timeout(1500)
         try:
@@ -59,6 +61,6 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> Tuple[bool, bool]:
         except Error:
             success = False
         tries -= 1
-    if tries == 10:
+    if tries == user_tries:
         cf = False
     return success, cf
