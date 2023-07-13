@@ -7,16 +7,6 @@ async def test_cf_challenge(url: str):
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=False,
-            args=[
-                "--disable-gpu",
-                "--no-sandbox",
-                "--disable-dev-shm-usage",
-                "--no-first-run",
-                "--no-service-autorun",
-                "--no-default-browser-check",
-                "--password-store=basic",
-                "--start-maximized",
-            ],
         )
         context = await browser.new_context()
         page = await context.new_page()
