@@ -37,8 +37,7 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: vvanglro/cf-clearance:latest,${{ steps.meta.outputs.tags }}-amd64
-#          tags: vvanglro/cf-clearance:latest
+          tags: vvanglro/cf-clearance:latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker Arm image
@@ -48,6 +47,5 @@ jobs:
           file: ./docker/Dockerfile_Arm
           push: true
           platforms: linux/arm64
-          tags: vvanglro/cf-clearance:latest-arm64,${{ steps.meta.outputs.tags }}-arm64
-#          tags: vvanglro/cf-clearance:latest-arm64
+          tags: vvanglro/cf-clearance:latest-arm64
           labels: ${{ steps.meta.outputs.labels }}
