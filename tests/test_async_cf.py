@@ -31,10 +31,10 @@ async def test_cf_challenge():
         page = await content.new_page()
         await async_stealth(page, pure=True)
         await page.goto("https://nowsecure.nl")
-        res = await async_cf_retry(page)
+        res, cf = await async_cf_retry(page)
         ua = None
         cf_clearance_value = None
-        if res:
+        if res and cf:
             cookies = await page.context.cookies()
             for cookie in cookies:
                 if cookie.get("name") == "cf_clearance":

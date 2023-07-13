@@ -28,3 +28,4 @@ repos:
         entry: '\bprint\('
         language: pygrep
         types: [ python ]
+        exclude: "tests/test_cron_challenge.py"
