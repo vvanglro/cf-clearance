@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 from dataclasses import dataclass
+from importlib.resources import read_text
 from typing import Dict, Union
 
-import pkg_resources
 from playwright.async_api import BrowserContext as AsyncContext
 from playwright.async_api import Page as AsyncPage
 from playwright.sync_api import BrowserContext as SyncContext
@@ -12,7 +12,8 @@ from playwright.sync_api import Page as SyncPage
 
 def from_file(name):
     """Read script from ./js directory"""
-    return pkg_resources.resource_string("cf_clearance", f"js/{name}").decode()
+
+    return read_text("cf_clearance.js", f"{name}")
 
 
 SCRIPTS: Dict[str, str] = {
@@ -74,11 +75,11 @@ class StealthConfig:
 
 def sync_stealth(
     page_or_context: Union[SyncContext, SyncPage],
-    config: StealthConfig = None,
+    config: StealthConfig = StealthConfig(),
     pure: bool = True,
 ):
     """teaches synchronous playwright Page to be stealthy like a ninja!"""
-    for script in (config or StealthConfig()).enabled_scripts:
+    for script in config.enabled_scripts:
         page_or_context.add_init_script(script)
     if pure:
         page_or_context.route(
@@ -91,11 +92,11 @@ def sync_stealth(
 
 async def async_stealth(
     page_or_context: Union[AsyncContext, AsyncPage],
-    config: StealthConfig = None,
+    config: StealthConfig = StealthConfig(),
     pure: bool = True,
 ):
     """teaches asynchronous playwright Page to be stealthy like a ninja!"""
-    for script in (config or StealthConfig()).enabled_scripts:
+    for script in config.enabled_scripts:
         await page_or_context.add_init_script(script)
     if pure:
         await page_or_context.route(
