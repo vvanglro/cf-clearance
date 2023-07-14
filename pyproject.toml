@@ -33,4 +33,9 @@ dev = [
 ]
 
 [tool.ruff]
+select = [
+    "I",   # isort
+    "E",   # pycodestyle
+    "F",   # pyflakes
+]
 line-length = 120
