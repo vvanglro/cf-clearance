@@ -21,7 +21,7 @@ async def async_cf_retry(page: AsyncPage, tries: int = 10) -> Tuple[bool, bool]:
                 if "challenge" in target_frame.url and "turnstile" in target_frame.url:
                     try:
                         click = await target_frame.query_selector(
-                            "#challenge-stage > div > label > input[type=checkbox]"
+                            "xpath=//input[@type='checkbox']"
                         )
                     except Error:
                         # frame is refreshed, so playwright._impl._api_types.Error: Target closed
@@ -52,7 +52,7 @@ def sync_cf_retry(page: SyncPage, tries: int = 10) -> Tuple[bool, bool]:
                 if "challenge" in target_frame.url and "turnstile" in target_frame.url:
                     try:
                         click = target_frame.query_selector(
-                            "#challenge-stage > div > label > input[type=checkbox]"
+                            "xpath=//input[@type='checkbox']"
                         )
                     except Error:
                         # frame is refreshed, so playwright._impl._api_types.Error: Target closed
