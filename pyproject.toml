@@ -3,25 +3,29 @@ name = "cf_clearance"
 version = "0.30.1"
 description = "Purpose To make a cloudflare v2 challenge pass successfully, Can be use cf_clearance bypassed by cloudflare, However, with the cf_clearance, make sure you use the same IP and UA as when you got it."
 authors = [
-    {name = "vvanglro", email = "vvanglro@gmail.com"},
+    { name = "vvanglro", email = "vvanglro@gmail.com" },
 ]
 dependencies = [
     "playwright",
 ]
 requires-python = ">=3.8,<4"
 readme = "README.md"
-license = {text = "Apache-2.0"}
-classifiers=[
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-    ]
+license = { text = "Apache-2.0" }
+keywords = ["cloudflare-bypass", "cloudflare-scrape", "anti-bot-page", "cloudflare", "cf-clearance"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
 
 [project.urls]
 Homepage = "https://github.com/vvanglro/cf_clearance"
 Repository = "https://github.com/vvanglro/cf_clearance"
+
+[tool.pdm.build]
+excludes = ["example", "tests"]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -30,12 +34,16 @@ build-backend = "pdm.backend"
 [tool.pdm.dev-dependencies]
 dev = [
     "pre-commit>=3.3.3",
+    "fastapi==0.85.0",
+    "uvicorn>=0.23.0",
+    "pyvirtualdisplay>=3.0",
+    "requests==2.29.0",
 ]
 
 [tool.ruff]
 select = [
-    "I",   # isort
-    "E",   # pycodestyle
-    "F",   # pyflakes
+    "I", # isort
+    "E", # pycodestyle
+    "F", # pyflakes
 ]
 line-length = 120
