@@ -1,4 +1,5 @@
 import asyncio
+import enum
 from typing import Dict, List, Literal, Optional
 
 from fastapi import FastAPI
@@ -10,6 +11,11 @@ from typing_extensions import TypedDict
 from cf_clearance import async_cf_retry, async_stealth
 
 app = FastAPI()
+
+
+class BrowserEnum(enum.IntEnum):
+    chromium = 1
+    firefox = 2
 
 
 class ProxySetting(BaseModel):
@@ -41,8 +47,10 @@ class ChallengeRequest(BaseModel):
     timeout: int = Field(10)
     url: str = Field(...)
     pure: bool = Field(False)
+    browser: BrowserEnum = Field(BrowserEnum.firefox)
     cookies: List[SetCookieParam] = Field(None)
     headers: Dict[str, str] = Field(None)
+    exec_js: str = Field(None)
 
     class Config:
         schema_extra = {
@@ -50,7 +58,8 @@ class ChallengeRequest(BaseModel):
                 "proxy": {"server": "socks5://localhost:7890"},
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
-                "pure": False,
+                "pure": True,
+                "browser": 2,
                 "cookies": [
                     {
                         "url": "https://www.example.com",
@@ -59,6 +68,7 @@ class ChallengeRequest(BaseModel):
                     }
                 ],
                 "headers": {"example-ua": "example-ua-value"},
+                "exec_js": "() => {return navigator.userAgent}",
             },
         }
 
@@ -71,6 +81,7 @@ class ChallengeResponse(BaseModel):
     cookies: dict = Field(None)
     headers: dict = Field(None)
     content: str = Field(None)
+    exec_js_resp: str = Field(None)
 
 
 async def pw_challenge(data: ChallengeRequest):
@@ -89,7 +100,6 @@ async def pw_challenge(data: ChallengeRequest):
             "--disable-dev-shm-usage",
             "--no-first-run",
             "--no-service-autorun",
-            "--no-default-browser-check",
             "--password-store=basic",
         ],
     }
@@ -98,14 +108,21 @@ async def pw_challenge(data: ChallengeRequest):
     # https://github.com/microsoft/playwright/issues/6319
     with Display():
         async with async_playwright() as p:
-            browser = await p.chromium.launch(**launch_data)
+            browser = None
+            if data.browser == BrowserEnum.firefox:
+                launch_data.update({"headless": True})
+                browser = await p.firefox.launch(**launch_data)
+            elif data.browser == BrowserEnum.chromium:
+                browser = await p.chromium.launch(**launch_data)
+            assert browser
             ctx = await browser.new_context()
             if data.cookies:
                 await ctx.add_cookies(data.cookies)
             if data.headers:
                 await ctx.set_extra_http_headers(data.headers)
             page = await ctx.new_page()
-            await async_stealth(page, pure=data.pure)
+            if data.browser != BrowserEnum.firefox:
+                await async_stealth(page, pure=data.pure)
             resp = await page.goto(data.url)
             success, cf = await async_cf_retry(page)
             if not success:
@@ -117,6 +134,9 @@ async def pw_challenge(data: ChallengeRequest):
                 for cookie in await page.context.cookies()
             }
             content = await page.content()
+            exec_js_resp = None
+            if data.exec_js:
+                exec_js_resp = await page.evaluate(data.exec_js)
             await browser.close()
     return {
         "success": success,
@@ -126,6 +146,7 @@ async def pw_challenge(data: ChallengeRequest):
         "msg": "cf challenge success",
         "content": content,
         "headers": resp.headers,
+        "exec_js_resp": exec_js_resp,
     }
 
 
