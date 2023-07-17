@@ -15,7 +15,7 @@ async def test_cf_challenge(url: str):
         )
         context = await browser.new_context()
         page = await context.new_page()
-        await async_stealth(page)
+        await async_stealth(page, pure=True)
         await page.goto(url)
         success, cf = await async_cf_retry(page)
         if cf:
