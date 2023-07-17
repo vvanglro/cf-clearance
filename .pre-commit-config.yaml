@@ -5,6 +5,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+      - id: check-toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.0.277
@@ -32,4 +33,4 @@ repos:
         entry: '\bprint\('
         language: pygrep
         types: [ python ]
-        exclude: "tests/test_cron_challenge.py"
+        exclude: "example/test_chromium_cron_challenge.py|example/test_firefox_cron_challenge.py"
