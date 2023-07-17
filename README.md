@@ -25,6 +25,7 @@ Challenge are not always successful. Please try more and handle exceptions.
 ## Docker Usage
 
 Recommended to install using Docker container on Ubuntu server.
+
 DockerHub => https://hub.docker.com/r/vvanglro/cf-clearance
 
 ```shell
