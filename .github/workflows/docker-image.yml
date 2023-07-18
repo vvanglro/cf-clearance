@@ -30,15 +30,15 @@ jobs:
         with:
           images: vvanglro/cf-clearance
 
-#      - name: Build and push Docker Arm image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: .
-#          file: ./docker/Dockerfile_Arm
-#          push: true
-#          platforms: linux/arm64
-#          tags: vvanglro/cf-clearance:latest-arm64
-#          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker Arm image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./docker/Dockerfile_Arm
+          push: true
+          platforms: linux/arm64
+          tags: vvanglro/cf-clearance:latest-arm64
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
@@ -47,5 +47,5 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: vvanglro/cf-clearance:latest-test
+          tags: vvanglro/cf-clearance:latest
           labels: ${{ steps.meta.outputs.labels }}

@@ -33,4 +33,4 @@ repos:
         entry: '\bprint\('
         language: pygrep
         types: [ python ]
-        exclude: "example/test_chromium_cron_challenge.py|example/test_firefox_cron_challenge.py"
+        exclude: "example/test_chromium_cron_challenge.py|example/test_firefox_challenge.py"

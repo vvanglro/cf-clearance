@@ -1,5 +1,4 @@
 import asyncio
-import enum
 from typing import Dict, List, Literal, Optional
 
 from fastapi import FastAPI
@@ -11,11 +10,6 @@ from typing_extensions import TypedDict
 from cf_clearance import async_cf_retry, async_stealth
 
 app = FastAPI()
-
-
-class BrowserEnum(enum.IntEnum):
-    chromium = 1
-    firefox = 2
 
 
 class ProxySetting(BaseModel):
@@ -47,7 +41,6 @@ class ChallengeRequest(BaseModel):
     timeout: int = Field(10)
     url: str = Field(...)
     pure: bool = Field(False)
-    browser: BrowserEnum = Field(BrowserEnum.chromium)
     cookies: List[SetCookieParam] = Field(None)
     headers: Dict[str, str] = Field(None)
     exec_js: str = Field(None)
@@ -59,7 +52,6 @@ class ChallengeRequest(BaseModel):
                 "timeout": 20,
                 "url": "https://nowsecure.nl",
                 "pure": True,
-                "browser": 1,
                 "cookies": [
                     {
                         "url": "https://www.example.com",
@@ -100,6 +92,7 @@ async def chromium(data: ChallengeRequest):
             "--disable-dev-shm-usage",
             "--no-first-run",
             "--no-service-autorun",
+            "--no-default-browser-check",
             "--password-store=basic",
         ],
     }
@@ -143,59 +136,8 @@ async def chromium(data: ChallengeRequest):
     }
 
 
-async def firefox(data: ChallengeRequest):
-    launch_data = {
-        "headless": True,
-        "proxy": {
-            "server": data.proxy.server,
-            "username": data.proxy.username,
-            "password": data.proxy.password,
-        }
-        if data.proxy
-        else None,
-    }
-    # Create a new context for each request:
-    # https://github.com/microsoft/playwright/issues/17736#issuecomment-1263667429
-    # https://github.com/microsoft/playwright/issues/6319
-    async with async_playwright() as p:
-        browser = await p.firefox.launch(**launch_data)
-        ctx = await browser.new_context()
-        if data.cookies:
-            await ctx.add_cookies(data.cookies)
-        if data.headers:
-            await ctx.set_extra_http_headers(data.headers)
-        page = await ctx.new_page()
-        resp = await page.goto(data.url)
-        success, cf = await async_cf_retry(page)
-        if not success:
-            await browser.close()
-            return {"success": success, "msg": "cf challenge fail"}
-        user_agent = await page.evaluate("() => navigator.userAgent")
-        cookies = {
-            cookie["name"]: cookie["value"] for cookie in await page.context.cookies()
-        }
-        content = await page.content()
-        exec_js_resp = None
-        if data.exec_js:
-            exec_js_resp = await page.evaluate(data.exec_js)
-        await browser.close()
-    return {
-        "success": success,
-        "cf": cf,
-        "user_agent": user_agent,
-        "cookies": cookies,
-        "msg": "cf challenge success",
-        "content": content,
-        "headers": resp.headers,
-        "exec_js_resp": exec_js_resp,
-    }
-
-
 async def pw_challenge(data: ChallengeRequest):
-    if data.browser == BrowserEnum.chromium:
-        return await chromium(data)
-    elif data.browser == BrowserEnum.firefox:
-        return await firefox(data)
+    return await chromium(data)
 
 
 @app.post("/challenge", response_model=ChallengeResponse)

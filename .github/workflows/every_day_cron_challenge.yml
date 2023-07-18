@@ -22,6 +22,4 @@ jobs:
           pdm run playwright install chromium firefox
           sudo apt-get install xvfb
       - name: Run script
-        run: |
-          pdm run python example/test_firefox_cron_challenge.py
-          xvfb-run pdm run python example/test_chromium_cron_challenge.py
+        run: xvfb-run pdm run python example/test_chromium_cron_challenge.py

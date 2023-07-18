@@ -11,7 +11,7 @@ async def test_cf_challenge(url: str):
     # get cf_clearance
     async with async_playwright() as p:
         browser = await p.firefox.launch(
-            headless=True,
+            headless=False,
         )
         context = await browser.new_context()
         page = await context.new_page()
