@@ -14,12 +14,12 @@ the cf_clearance, make sure you use the same IP and UA as when you got it.
 
 ## Warning
 
-If you use chromium, Please use interface mode, You must add headless=False.
-If you use it on linux or docker, use XVFB.
+- **If you use chromium, Please use interface mode, You must add headless=False.**
+**If you use it on linux or docker, use XVFB.**
 
-If you use firefox you don't need interface mode and XVFB, But unstable and not recommended.
+- **If you use firefox you don't need interface mode and XVFB, But unstable and not recommended.**
 
-Challenge are not always successful. Please try more and handle exceptions.
+- **Challenge are not always successful. Please try more and handle exceptions.**
 
 
 ## Docker Usage
