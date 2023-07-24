@@ -7,13 +7,14 @@ from cf_clearance import async_cf_retry, async_stealth
 
 async def test_cf_challenge(url: str):
     # not use cf_clearance, cf challenge is fail
-    res = requests.get("https://nowsecure.nl")
+    res = requests.get(url)
     assert "<title>Just a moment...</title>" in res.text
     # get cf_clearance
     with Display():
         async with async_playwright() as p:
             browser = await p.chromium.launch(
                 headless=False,
+                devtools=True,
             )
             context = await browser.new_context()
             page = await context.new_page()
@@ -38,7 +39,7 @@ async def test_cf_challenge(url: str):
     # use cf_clearance, must be same IP and UA
     headers = {"user-agent": ua}
     cookies = {"cf_clearance": cf_clearance_value}
-    res = requests.get("https://nowsecure.nl", headers=headers, cookies=cookies)
+    res = requests.get(url, headers=headers, cookies=cookies)
     assert "<title>Just a moment...</title>" not in res.text
 
 
