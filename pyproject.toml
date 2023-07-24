@@ -45,5 +45,5 @@ dev = [
     "fastapi==0.99.1",
     "uvicorn==0.23.0",
     "pyvirtualdisplay==3.0",
-    "requests==2.29.0",
+    "requests[socks]>=2.29.0",
 ]

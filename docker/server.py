@@ -79,6 +79,7 @@ class ChallengeResponse(BaseModel):
 async def chromium(data: ChallengeRequest):
     launch_data = {
         "headless": False,
+        "devtools": True,
         "proxy": {
             "server": data.proxy.server,
             "username": data.proxy.username,

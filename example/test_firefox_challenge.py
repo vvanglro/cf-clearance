@@ -11,7 +11,7 @@ async def test_cf_challenge(url: str):
     # get cf_clearance
     async with async_playwright() as p:
         browser = await p.firefox.launch(
-            headless=False,
+            headless=False
         )
         context = await browser.new_context()
         page = await context.new_page()
@@ -30,7 +30,6 @@ async def test_cf_challenge(url: str):
                 raise
         else:
             print("No cloudflare challenges encountered")
-
         await browser.close()
     # use cf_clearance, must be same IP and UA
     headers = {"user-agent": ua}
