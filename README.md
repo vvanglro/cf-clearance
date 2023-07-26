@@ -1,3 +1,6 @@
+# This project has stopped to maintenance
+**Why stop, please refer here: [Stopped to maintenance](https://github.com/vvanglro/cf-clearance/issues/58)**.
+
 # cf-clearance
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/vvanglro/cf_clearance.svg?size=small)](https://www.oscs1024.com/project/vvanglro/cf_clearance?ref=badge_small)
