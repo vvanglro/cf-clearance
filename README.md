@@ -7,6 +7,9 @@
 </h3>
 <br>
 At the lowest price on the market, you may receive a variety of solutions, including reCAPTCHA V2, reCAPTCHA V3, hCaptcha, hCaptcha Click, FunCaptcha, picture-to-text, and more. With this service, 0.1s is the slowest speed ever measured.
+
+Bypass Cloudflare Challenge: https://www.capsolver.com/blog/Cloudflare/how-to-solve-cloudflare-challenge        
+Bypass Cloudflare Turnstile: https://docs.capsolver.com/guide/antibots/cloudflare_turnstile.html
 <hr>
 
 # This project has stopped to maintenance
